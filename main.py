@@ -84,8 +84,16 @@ def main():
     d_enable = True
     try:
         from modules.statistics import get_all_course_progress
+        print("statistics OK")
+
         from modules.recommend import get_recommend_schedule
+        print("recommend OK")
+
         from modules.visualize import draw_course_progress_bar, draw_recommend_rank_bar
+        print("visualize OK")
+
+    except Exception as e:
+        print(e)
     except ImportError:
         b_enable = False
         c_enable = False
