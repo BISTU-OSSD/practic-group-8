@@ -1,6 +1,12 @@
 from csv_import import import_csv
 from data import load_courses, load_config
 from pathlib import Path
+from modules.course import (
+    add_course,
+    update_course,
+    delete_course,
+    get_all_courses
+)
 
 # ========= 自动导入 =========
 DATA_DIR = Path(__file__).parent / "data"
@@ -71,6 +77,55 @@ def show_courses():
         print(f"难度：{c['difficulty']}")
         print("-" * 40)
 
+def course_menu():
+    while True:
+        print("\n=====课程管理(A)=====")
+        print("1. 查看全部课程")
+        print("2. 新增课程")
+        print("3. 修改课程")
+        print("4. 删除课程")
+        print("0. 返回主菜单")
+
+        choice = input("请选择：")
+
+        if choice == "1":
+            courses = get_all_courses()
+            for c in courses:
+                print(c)
+
+        elif choice == "2":
+            info = {
+                "name": input("课程名："),
+                "teacher": input("教师："),
+                "credit": int(input("学分：")),
+                "week_type": input("周类型："),
+                "week_range": [1,16],
+                "hours": int(input("总课时："))
+            }
+
+            print(add_course(info))
+
+        elif choice == "3":
+            target = int(input("课程ID："))
+
+            info = {
+                "name": input("课程名："),
+                "teacher": input("教师："),
+                "credit": int(input("学分：")),
+                "week_type": input("周类型："),
+                "week_range": [1,16],
+                "hours": int(input("总课时："))
+            }
+
+            print(update_course(target, info))
+
+        elif choice == "4":
+            target = int(input("课程ID："))
+            print(delete_course(target))
+
+        elif choice == "0":
+            break
+
 # ========= 主程序 =========
 def main():
     init_system()
@@ -106,8 +161,10 @@ def main():
         if choice == "1":
             show_courses()
 
+
         elif choice == "2":
-            print("\n>>> 请运行 modules/course.py")
+
+            course_menu()
 
         elif choice == "3":
             # 无论模块是否完成，都会先弹出日期选择
