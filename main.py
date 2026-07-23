@@ -166,13 +166,20 @@ def main():
 
             course_menu()
 
+
         elif choice == "3":
-            # 无论模块是否完成，都会先弹出日期选择
-            select_target_date()
+
             if not b_enable:
+
                 print("B模块（学期统计）暂未开发完成！")
+
             else:
+
                 target_day = select_target_date()
+
+                progress_info = get_all_course_progress(target_day)
+
+                print(f"\n===== 学期统计 | 查询日期：{progress_info['target_query_date']} =====")
                 progress_info = get_all_course_progress(target_day)
                 print(f"\n===== 学期统计 | 查询日期：{progress_info['target_query_date']} =====")
                 print(f"当前教学周：{progress_info['current_week']}")
@@ -187,11 +194,13 @@ def main():
 
         elif choice == "4":
             # 无论模块是否完成，都会先弹出日期选择
-            select_target_date()
             if not c_enable:
                 print("C模块（智能推荐）暂未开发完成！")
             else:
                 target_day = select_target_date()
+
+                progress_info = get_all_course_progress(target_day)
+                recommend_list = get_recommend_schedule(progress_info)
                 progress_info = get_all_course_progress(target_day)
                 recommend_list = get_recommend_schedule(progress_info)
                 print("\n===== 复习优先级推荐（分数越高，优先复习）=====")
@@ -203,11 +212,14 @@ def main():
 
         elif choice == "5":
             # 无论模块是否完成，都会先弹出日期选择
-            select_target_date()
             if not d_enable:
                 print("D模块（可视化）暂未开发完成！")
             else:
                 target_day = select_target_date()
+
+                progress_info = get_all_course_progress(target_day)
+                recommend_list = get_recommend_schedule(progress_info)
+
                 progress_info = get_all_course_progress(target_day)
                 recommend_list = get_recommend_schedule(progress_info)
                 print("\n===== 课程课时进度可视化 =====")
