@@ -1,5 +1,6 @@
 from typing import List, Dict
 
+
 # ====================== 权重配置常量（可调整） ======================
 WEIGHT_CREDIT = 2.5      # 学分权重
 WEIGHT_DIFFICULTY = 3.0  # 难度权重
@@ -83,6 +84,99 @@ if __name__ == "__main__":
         "current_week": 8,
         "semester_remain_days": 86,
         "remain_weekend_count": 22,
+
+# ====================== 权重配置 ======================
+WEIGHT_CREDIT = 2.5      # 学分权重
+WEIGHT_DIFFICULTY = 3.0  # 难度权重
+WEIGHT_REMAIN = 1.8      # 剩余课时权重
+HOUR_PER_CLASS = 1.2     # 每节课建议复习时长(h)
+# =====================================================
+
+
+def get_recommend_schedule(progress_data: Dict) -> List[Dict]:
+    """
+    根据B模块统计结果生成推荐列表
+    """
+
+    course_list = progress_data["course_list"]
+
+    recommend_result = []
+
+    for course in course_list:
+
+        remain = course["remain"]
+
+        if remain <= 0:
+            priority_score = 0
+            estimate_hour = 0
+        else:
+
+            base_score = (
+                course["credit"] * WEIGHT_CREDIT +
+                course["difficulty"] * WEIGHT_DIFFICULTY +
+                remain * WEIGHT_REMAIN
+            )
+
+            progress_factor = 1 + (100 - course["percent"]) / 100
+
+            priority_score = round(base_score * progress_factor, 1)
+
+            estimate_hour = round(remain * HOUR_PER_CLASS, 1)
+
+        recommend_result.append({
+
+            "course_name": course["course_name"],
+
+            "priority_score": priority_score,
+
+            "credit": course["credit"],
+
+            "difficulty": course["difficulty"],
+
+            "remain_classes": remain,
+
+            "total_classes": course["total_classes"],
+
+            "finished_classes": course["finished"],
+
+            "complete_percent": course["percent"],
+
+            "estimate_review_hour": estimate_hour
+
+        })
+
+    recommend_result.sort(
+        key=lambda x: (
+            x["priority_score"],
+            x["remain_classes"]
+        ),
+        reverse=True
+    )
+
+    return recommend_result
+
+
+# ====================== 工具函数 ======================
+
+def filter_unfinished_courses(recommend_list):
+
+    return [
+        item
+        for item in recommend_list
+        if item["remain_classes"] > 0
+    ]
+
+
+def get_top_n_recommend(recommend_list, top_n=5):
+
+    return filter_unfinished_courses(recommend_list)[:top_n]
+
+
+# ====================== 本地测试 ======================
+if __name__ == "__main__":
+
+    mock_data = {
+>>>>>>> 149004c11454b41d7378682b0cbb4d9c5ff419df
         "course_list": [
             {
                 "course_name": "高等数学",
@@ -94,13 +188,18 @@ if __name__ == "__main__":
                 "percent": 46.7
             },
             {
+<<<<<<< HEAD
                 "course_name": "程序设计基础(Python)A",
+
+                "course_name": "Python",
+
                 "credit": 3,
                 "difficulty": 4,
                 "total_classes": 11,
                 "finished": 6,
                 "remain": 5,
                 "percent": 54.5
+
             },
             {
                 "course_name": "基础英语A",
@@ -119,9 +218,11 @@ if __name__ == "__main__":
                 "finished": 2,
                 "remain": 0,
                 "percent": 100.0
+
             }
         ]
     }
+
 
     # 调用核心推荐函数
     rec_list = get_recommend_schedule(mock_b_data)
@@ -133,3 +234,9 @@ if __name__ == "__main__":
     top3 = get_top_n_recommend(rec_list, 3)
     for idx, item in enumerate(top3, start=1):
         print(f"{idx}. {item['course_name']}  分数：{item['priority_score']}")
+
+    result = get_recommend_schedule(mock_data)
+
+    for i in result:
+        print(i)
+
