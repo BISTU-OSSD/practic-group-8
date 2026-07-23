@@ -63,9 +63,11 @@ SemesterTracker
 ├── main.py                # 主程序
 ├── csv_import.py          # 导入课程CSV
 ├── data.py                # 数据读写
-├── recommendation.py      # 学习推荐
-├── statistic.py           # 课程统计
-├── visualize.py           # 学期进度可视化
+├── modules/
+│   ├── cuorses.py         # 课程管理
+│   ├── recommendation.py  # 学习推荐
+│   ├── statistic.py       # 课程统计
+│   └── visualize.py       # 学期进度可视化
 │
 ├── data/
 │   ├── courses.json
