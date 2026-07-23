@@ -7,6 +7,16 @@ from modules.course import (
     delete_course,
     get_all_courses
 )
+from pathlib import Path
+
+# 新增全局导入
+try:
+    from modules.statistics import get_all_course_progress
+    from modules.recommend import get_recommend_schedule
+    from modules.visualize import draw_course_progress_bar, draw_recommend_rank_bar
+    b_enable = c_enable = d_enable = True
+except ImportError:
+    b_enable = c_enable = d_enable = False
 
 # ========= 自动导入 =========
 DATA_DIR = Path(__file__).parent / "data"
@@ -137,23 +147,7 @@ def main():
     b_enable = True
     c_enable = True
     d_enable = True
-    try:
-        from modules.statistics import get_all_course_progress
-        print("statistics OK")
 
-        from modules.recommend import get_recommend_schedule
-        print("recommend OK")
-
-        from modules.visualize import draw_course_progress_bar, draw_recommend_rank_bar
-        print("visualize OK")
-
-    except Exception as e:
-        print(e)
-    except ImportError:
-        b_enable = False
-        c_enable = False
-        d_enable = False
-        print("\n提示：统计/推荐/可视化模块尚未开发完成，对应3/4/5功能暂时不可用\n")
 
     while True:
         show_menu()

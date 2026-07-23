@@ -84,12 +84,14 @@ if __name__ == "__main__":
         "current_week": 8,
         "semester_remain_days": 86,
         "remain_weekend_count": 22,
+    }
 
 # ====================== 权重配置 ======================
 WEIGHT_CREDIT = 2.5      # 学分权重
 WEIGHT_DIFFICULTY = 3.0  # 难度权重
 WEIGHT_REMAIN = 1.8      # 剩余课时权重
 HOUR_PER_CLASS = 1.2     # 每节课建议复习时长(h)
+
 # =====================================================
 
 
@@ -176,7 +178,7 @@ def get_top_n_recommend(recommend_list, top_n=5):
 if __name__ == "__main__":
 
     mock_data = {
->>>>>>> 149004c11454b41d7378682b0cbb4d9c5ff419df
+
         "course_list": [
             {
                 "course_name": "高等数学",
@@ -188,7 +190,7 @@ if __name__ == "__main__":
                 "percent": 46.7
             },
             {
-<<<<<<< HEAD
+
                 "course_name": "程序设计基础(Python)A",
 
                 "course_name": "Python",
