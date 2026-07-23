@@ -66,9 +66,7 @@ def show_menu():
     print("1. 查看课程")
     print("2. 课程管理（A）")
     print("3. 学期统计（B）")
-    print("4. 智能推荐（C）")
-    print("5. 数据可视化（D）")
-    print("6. 重置学期开学日期")
+    print("4. 重置学期开学日期")
     print("0. 退出")
     print("==============================")
 
@@ -161,12 +159,14 @@ def main():
             course_menu()
 
 
+
         elif choice == "3":
 
             if not b_enable:
 
                 print("B模块（学期统计）暂未开发完成！")
 
+
             else:
 
                 target_day = select_target_date()
@@ -174,54 +174,85 @@ def main():
                 progress_info = get_all_course_progress(target_day)
 
                 print(f"\n===== 学期统计 | 查询日期：{progress_info['target_query_date']} =====")
-                progress_info = get_all_course_progress(target_day)
-                print(f"\n===== 学期统计 | 查询日期：{progress_info['target_query_date']} =====")
+
                 print(f"当前教学周：{progress_info['current_week']}")
+
                 print(f"距离期末剩余天数：{progress_info['semester_remain_days']}")
+
                 print(f"剩余周末总数：{progress_info['remain_weekend_count']}\n")
+
                 course_list = progress_info["course_list"]
+
                 if not course_list:
+
                     print("暂无课程统计数据")
+
                 else:
+
                     for item in course_list:
-                        print(f"{item['course_name']} | 总课时：{item['total_classes']} | 已上：{item['finished']} | 剩余：{item['remain']} | 完成率：{item['percent']}%")
+                        print(
+
+                            f"{item['course_name']} | "
+
+                            f"总课时：{item['total_classes']} | "
+
+                            f"已上：{item['finished']} | "
+
+                            f"剩余：{item['remain']} | "
+
+                            f"完成率：{item['percent']}%"
+
+                        )
+
+                # ========= 是否查看智能推荐 =========
+
+                if c_enable:
+
+                    ans = input("\n是否查看智能推荐？(Y/N)：").strip().lower()
+
+                    if ans == "y"&"Y":
+
+                        recommend_list = get_recommend_schedule(progress_info)
+
+                        print("\n===== 复习优先级推荐 =====")
+
+                        if not recommend_list:
+
+                            print("暂无课程，无法生成推荐列表")
+
+                        else:
+
+                            for sort_num, data in enumerate(recommend_list, start=1):
+                                print(
+
+                                    f"第{sort_num}优先级："
+
+                                    f"{data['course_name']} "
+
+                                    f"优先级分数：{data['priority_score']}"
+
+                                )
+
+                # ========= 是否查看可视化 =========
+
+                if d_enable:
+
+                    ans = input("\n是否查看数据可视化？(Y/N)：").strip().lower()
+
+                    if ans == "y"&"Y":
+
+                        if 'recommend_list' not in locals():
+                            recommend_list = get_recommend_schedule(progress_info)
+
+                        print("\n===== 课程课时进度可视化 =====")
+
+                        draw_course_progress_bar(progress_info)
+
+                        print("\n===== 复习优先级次序可视化 =====")
+
+                        draw_recommend_rank_bar(recommend_list)
 
         elif choice == "4":
-            # 无论模块是否完成，都会先弹出日期选择
-            if not c_enable:
-                print("C模块（智能推荐）暂未开发完成！")
-            else:
-                target_day = select_target_date()
-
-                progress_info = get_all_course_progress(target_day)
-                recommend_list = get_recommend_schedule(progress_info)
-                progress_info = get_all_course_progress(target_day)
-                recommend_list = get_recommend_schedule(progress_info)
-                print("\n===== 复习优先级推荐（分数越高，优先复习）=====")
-                if not recommend_list:
-                    print("暂无课程，无法生成推荐列表")
-                else:
-                    for sort_num, data in enumerate(recommend_list, start=1):
-                        print(f"第{sort_num}优先级：{data['course_name']} 优先级分数：{data['priority_score']}")
-
-        elif choice == "5":
-            # 无论模块是否完成，都会先弹出日期选择
-            if not d_enable:
-                print("D模块（可视化）暂未开发完成！")
-            else:
-                target_day = select_target_date()
-
-                progress_info = get_all_course_progress(target_day)
-                recommend_list = get_recommend_schedule(progress_info)
-
-                progress_info = get_all_course_progress(target_day)
-                recommend_list = get_recommend_schedule(progress_info)
-                print("\n===== 课程课时进度可视化 =====")
-                draw_course_progress_bar(progress_info)
-                print("\n===== 复习优先级次序可视化 =====")
-                draw_recommend_rank_bar(recommend_list)
-
-        elif choice == "6":
             from csv_import import reset_semester_start
             reset_semester_start()
 
