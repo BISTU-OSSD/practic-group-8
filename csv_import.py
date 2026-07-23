@@ -3,7 +3,8 @@ import json
 import re
 from datetime import datetime, timedelta
 from pathlib import Path
-
+from tkinter import Tk
+from tkinter.filedialog import askopenfilename
 # ==========================
 # 文件路径
 # ==========================
@@ -12,7 +13,7 @@ BASE_DIR = Path(__file__).parent
 
 DATA_DIR = BASE_DIR / "data"
 
-CSV_PATH = DATA_DIR / "course_schedule.csv"
+
 
 COURSE_CONFIG_PATH = DATA_DIR / "course_config.json"
 
@@ -257,7 +258,27 @@ def remaining_classes(course, current_week):
 # 导入CSV
 # ==========================
 
-def import_csv():
+def import_csv(csv_path=None):
+    # 如果没有传入路径，则弹出文件选择框
+    if csv_path is None:
+
+        root = Tk()
+        root.withdraw()  # 不显示主窗口
+        root.attributes("-topmost", True)
+
+        csv_path = askopenfilename(
+            title="请选择课程表CSV文件",
+            filetypes=[
+                ("CSV文件", "*.csv"),
+                ("所有文件", "*.*")
+            ]
+        )
+
+        root.destroy()
+
+        if not csv_path:
+            print("已取消导入。")
+            return
 
     # 读取课程配置
     course_config = load_json(COURSE_CONFIG_PATH)
@@ -276,14 +297,14 @@ def import_csv():
 
     # 自动识别UTF-8或GBK编码
     try:
-        f = open(CSV_PATH, "r", encoding="utf-8-sig")
+        f = open(csv_path, "r", encoding="utf-8-sig")
         reader = csv.DictReader(f)
         rows = list(reader)
         f.close()
 
     except UnicodeDecodeError:
 
-        f = open(CSV_PATH, "r", encoding="gbk")
+        f = open(csv_path, "r", encoding="gbk")
         reader = csv.DictReader(f)
         rows = list(reader)
         f.close()

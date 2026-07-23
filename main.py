@@ -22,11 +22,7 @@ except ImportError:
 DATA_DIR = Path(__file__).parent / "data"
 COURSES_PATH = DATA_DIR / "courses.json"
 
-def init_system():
-    if not COURSES_PATH.exists():
-        print("首次运行，开始导入学校课表...\n")
-        import_csv()
-        print("\n初始化完成！")
+
 
 # ========== 日期选择 =============
 from data import get_today_date_obj, str_to_date, date_to_str
@@ -64,9 +60,10 @@ def show_menu():
     print("      CoursePilot")
     print("==============================")
     print("1. 查看课程")
-    print("2. 课程管理（A）")
-    print("3. 学期统计（B）")
-    print("4. 重置学期开学日期")
+    print("2. 导入课程表(CSV)")
+    print("3. 课程管理")
+    print("4. 学期进程")
+    print("5. 重置开学日期")
     print("0. 退出")
     print("==============================")
 
@@ -136,7 +133,7 @@ def course_menu():
 
 # ========= 主程序 =========
 def main():
-    init_system()
+
     config = load_config()
     print("\n学期开始：", config["semester_start"])
     print("学期结束：", config["semester_end"])
@@ -153,14 +150,17 @@ def main():
         if choice == "1":
             show_courses()
 
-
         elif choice == "2":
+            import_csv()
+
+
+        elif choice == "3":
 
             course_menu()
 
 
 
-        elif choice == "3":
+        elif choice == "4":
 
             if not b_enable:
 
@@ -252,7 +252,7 @@ def main():
 
                         draw_recommend_rank_bar(recommend_list)
 
-        elif choice == "4":
+        elif choice == "5":
             from csv_import import reset_semester_start
             reset_semester_start()
 
