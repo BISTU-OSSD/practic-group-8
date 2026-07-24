@@ -210,7 +210,7 @@ def main():
 
                     ans = input("\n是否查看智能推荐？(Y/N)：").strip().lower()
 
-                    if ans == "y"&"Y":
+                    if ans == "y":
 
                         recommend_list = get_recommend_schedule(progress_info)
 
@@ -239,7 +239,7 @@ def main():
 
                     ans = input("\n是否查看数据可视化？(Y/N)：").strip().lower()
 
-                    if ans == "y"&"Y":
+                    if ans == "y":
 
                         if 'recommend_list' not in locals():
                             recommend_list = get_recommend_schedule(progress_info)
